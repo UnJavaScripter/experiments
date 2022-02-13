@@ -1,4 +1,4 @@
-import { Particle } from './particle.js';
+import { Particle, ParticleDirection } from './particle.js';
 import { Tower } from './tower.js';
 
 class App {
@@ -11,6 +11,9 @@ class App {
   particles: Particle[] = [];
   towers: Tower[] = [];
   towersAvailable = 5;
+
+  towerEmoji = '🗿';
+  creepEmoji = '🦠';
 
   constructor() {
     this.canvas = <HTMLCanvasElement>document.getElementById('canvas');
@@ -27,7 +30,8 @@ class App {
             width: 20,
             height: 20,
             color: '#1e90ff',
-            direction: { x: 0, y: 0 }
+            direction: { x: 0, y: 0 },
+            emoji: this.towerEmoji
           }, 30, 700))
         }
       }
@@ -45,15 +49,22 @@ class App {
       this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
       this.setScore();
       this.displayTowersLeft();
+      
+      let particle;
+      let tower;
+      let distanceH;
       for (let i = 0; i < this.particles.length; i++) {
-        const particle = this.particles[i];
+        particle = this.particles[i];
         particle.update();
+        
         for (let j = 0; j < this.towers.length; j++) {
-          const tower = this.towers[j];
+          let shot;
+          tower = this.towers[j];
           tower.update();
-          const distanceH = this.getHypotenuse(particle, tower);
+          distanceH = this.getHypotenuse(particle, tower);
+
           if (distanceH < 170) {
-            const shot = tower.shoot(particle);
+            shot = tower.shoot(particle);
             if (shot > 0) {
               particle.hit(shot);
               if (particle.health <= 0) {
@@ -67,8 +78,8 @@ class App {
         }
       }
       if (this.gameOver) {
-        cancelAnimationFrame(raf);
         this.playerWins();
+        cancelAnimationFrame(raf);
       } else {
         raf = requestAnimationFrame(gameLoop);
       }
@@ -110,34 +121,36 @@ class App {
         width: 20,
         height: 20,
         color: 'pink',
-        direction: direction || { x: 1, y: 1 }
+        direction: direction || { x: 1, y: 1 },
+        emoji: this.creepEmoji
       })
     )
   }
 
   displayTowersLeft() {
-    this.ctx.font = '22px mono';
+    this.ctx.font = '22px system-ui ';
     this.ctx.textAlign = 'left'
     this.ctx.fillStyle = '#1e90ff';
     const towersLeft = this.towersAvailable - this.towers.length
     const value = new Array(towersLeft);
-    this.ctx.fillText(`[${value.fill('♖').join(' - ')}]`, 2, 20, 280);
+    this.ctx.fillText(`[${value.fill('🗿').join(' - ')}]`, 2, 20, 280);
   }
 
   setScore() {
-    this.ctx.font = '44px mono';
+    this.ctx.font = '44px system-ui ';
     this.ctx.textAlign = 'right'
-    this.ctx.fillStyle = '#aca110';
+    this.ctx.fillStyle = '#ff9f43';
     this.ctx.fillText(`${this.particles.length}/${this.particlesAmount}`, this.canvas.width - 20, 50, 280);
   }
 
   playerWins() {
     console.log('win')
-    this.ctx.font = '22px mono';
+    this.ctx.font = '32px system-ui ';
     this.ctx.textAlign = 'center'
-    this.ctx.fillStyle = '#aca110';
-    this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
-    this.ctx.fillText(`You did it! It took you ${Math.round((performance.now() - this.startTime) / 1000)}s and ${this.towers.length} towers`, this.canvas.width / 2, innerHeight / 2);
+    this.ctx.fillStyle = '#222f3e';
+    this.ctx.fillRect(10, (window.innerHeight / 3) - 50, this.canvas.width - 20, 80);
+    this.ctx.fillStyle = '#c8d6e5';
+    this.ctx.fillText(`You did it! It took you ${Math.round((performance.now() - this.startTime) / 1000)}s and ${this.towers.length} ${this.towerEmoji || 'towers'}`, this.canvas.width / 2, window.innerHeight / 3);
   }
 }
 

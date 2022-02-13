@@ -1,4 +1,4 @@
-import { Particle } from './particle.js'
+import { Particle, ParticleProps } from './particle.js'
 
 export class Tower extends Particle {
   lastShoot: number;
@@ -20,8 +20,8 @@ export class Tower extends Particle {
       this.ctx.lineDashOffset = 20;
       this.ctx.moveTo(this.x + (this.width / 2), this.y + (this.height / 2));
       this.ctx.lineTo(particle.x + (particle.width / 2), particle.y + (particle.height / 2));
-      this.ctx.strokeStyle = '#45a956';
-      this.ctx.lineWidth = 3;
+      this.ctx.strokeStyle = '#ee5253';
+      this.ctx.lineWidth = 4;
       this.ctx.closePath();
       this.ctx.stroke();
       this.lastShoot = performance.now();

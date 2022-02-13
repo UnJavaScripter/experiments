@@ -1,3 +1,9 @@
+export class ParticleProps {
+}
+export class ParticleDirection {
+}
+export class ParticleVelocity {
+}
 export class Particle {
     constructor(ctx, props) {
         this.ctx = ctx;
@@ -26,10 +32,9 @@ export class Particle {
             this.landed = true;
         }
         else {
-            const t = (Math.pow(this.x, 2) * this.gravity) / 2;
-            this.x = (this.x + (this.direction.x * this.velocity.x));
-            this.y += (this.mass * this.gravity) / 100;
-            // this.ctx.font = '10px serif';
+            this.x += (this.direction.x * this.velocity.x);
+            this.y += (this.mass * this.gravity) / 50;
+            // this.ctx.font = '20px serif';
             // this.ctx.fillText(Math.round(Math.floor(this.mass)).toString(), this.x, this.y);
         }
         this.draw();

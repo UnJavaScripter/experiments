@@ -1,3 +1,21 @@
+export class ParticleProps {
+  x: number;
+  y: number;
+  width: number;
+  height: number;
+  color?: string;
+  direction?: ParticleDirection;
+  mass?: number;
+}
+export class ParticleDirection {
+  x: number;
+  y: number;
+}
+export class ParticleVelocity {
+  x: number;
+  y: number;
+}
+
 export class Particle {
   ctx: CanvasRenderingContext2D;
   x: number;
@@ -42,15 +60,12 @@ export class Particle {
     if (this.y + this.height > this.ctx.canvas.height || this.y <= 0) {
       this.landed = true;
     } else {
-      const t = (Math.pow(this.x, 2) * this.gravity) / 2;
-
-      this.x = (this.x + (this.direction.x * this.velocity.x));
-      this.y += (this.mass * this.gravity) / 100;
-      // this.ctx.font = '10px serif';
+      this.x += (this.direction.x * this.velocity.x);
+      this.y += (this.mass * this.gravity) / 50;
+      // this.ctx.font = '20px serif';
       // this.ctx.fillText(Math.round(Math.floor(this.mass)).toString(), this.x, this.y);
     }
     this.draw();
-
   }
 
 }
