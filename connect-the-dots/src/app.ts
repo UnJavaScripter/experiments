@@ -19,7 +19,7 @@ class App {
     this.ctx = <CanvasRenderingContext2D>this.canvasElem.getContext('2d');
     this.canvasElem.addEventListener('pointerdown', this.addNewDrop.bind(this));
     this.seedAmount = 10;
-    this.maxParticles = 180;
+    this.maxParticles = Math.ceil(window.innerWidth * 0.08);
     this.distanceThreshold = 200;
 
     // Fix resize quality degradation
