@@ -32,14 +32,13 @@ self.onmessage = function (e) {
     }
 };
 function init(canvas) {
-    createSeed(seedAmount);
     canvas.width = width;
     canvas.height = height;
     distanceThreshold = Math.log(width) * 20;
     const gameLoop = () => {
         ctx.clearRect(0, 0, canvas.width, canvas.height);
         if (particles.size < maxParticles) {
-            createSeed(seedAmount);
+            createSeed(Math.ceil(seedAmount / 2));
         }
         let drop1;
         let drop2;

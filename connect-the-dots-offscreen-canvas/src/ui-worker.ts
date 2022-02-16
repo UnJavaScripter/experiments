@@ -39,7 +39,6 @@ self.onmessage = function (e: MessageEvent) {
 }
 
 function init(canvas: any) {
-  createSeed(seedAmount);
 
   canvas.width = width;
   canvas.height = height;
@@ -47,7 +46,7 @@ function init(canvas: any) {
   const gameLoop = () => {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     if (particles.size < maxParticles) {
-      createSeed(seedAmount);
+      createSeed(Math.ceil(seedAmount/2));
     }
 
     let drop1;

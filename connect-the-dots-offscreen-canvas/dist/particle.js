@@ -37,8 +37,8 @@ export class Particle {
             this.landed = true;
         }
         else {
-            this.x -= (this.direction.x * this.velocity.x) + 0.25;
-            this.y += (this.mass * this.gravity) / 250;
+            this.x -= (this.direction.x * this.velocity.x) + 1;
+            this.y += (this.mass * this.gravity) / 50;
         }
         this.draw();
     }

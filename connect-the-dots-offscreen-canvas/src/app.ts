@@ -23,7 +23,7 @@ class App {
     this.canvasContainerElem = <HTMLDivElement>document.getElementById('canvas-container');
     this.canvasElem = <HTMLCanvasElement>document.getElementById('canvas');
     this.canvasElem.addEventListener('pointerdown', this.addNewDrop.bind(this));
-    this.seedAmount = 100;
+    this.seedAmount = 200;
     this.maxParticles = Math.ceil(window.innerWidth * 0.5);
     this.w = window.innerWidth;
     this.h = window.innerHeight;

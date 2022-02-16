@@ -67,8 +67,8 @@ export class Particle {
     if (this.y + this.size > this.ctx.canvas.height || this.y <= 0 || this.x < 0) {
       this.landed = true;
     } else {
-      this.x -= (this.direction.x * this.velocity.x) + 0.25;
-      this.y += (this.mass * this.gravity) / 250;
+      this.x -= (this.direction.x * this.velocity.x) + 1;
+      this.y += (this.mass * this.gravity) / 50;
     }
     this.draw();
   }
