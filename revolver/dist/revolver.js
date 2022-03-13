@@ -6,7 +6,7 @@ class App {
         this.canvasContainerElem = document.getElementById('canvas-container');
         this.canvasElem = document.getElementById('canvas');
         this.ctx = this.canvasElem.getContext('2d');
-        this.seedAmount = 100;
+        this.seedAmount = 345;
         // Fix resize quality degradation
         this.canvasElem.height = window.innerHeight;
         const resizeObserver = new ResizeObserver(entries => {
@@ -40,12 +40,12 @@ class App {
             for (let i = 0; i < this.particles.length; i++) {
                 particle = this.particles[i];
                 // Massive Particles
-                for (let j = 0; j < this.particles.length; j++) {
-                    if (j !== i
-                        && !particle.isMassive
-                    // && this.particles[j].isMassive // Let the particles influence each other
-                    ) {
-                        this.particles[j].influence(particle);
+                if (particle.isMassive) {
+                    for (let j = 0; j < this.particles.length; j++) {
+                        if (j !== i
+                            && !this.particles[j].isMassive) {
+                            particle.influence(this.particles[j]);
+                        }
                     }
                 }
                 particle.update();
