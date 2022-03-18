@@ -13,7 +13,7 @@ class App {
   particles: Set<Particle> = new Set()
   massiveParticles: Set<Particle> = new Set()
   quadtree: QuadTree<Particle>
-  distanceThreshold: number = 100
+  distanceThreshold: number = Math.ceil(window.innerWidth * 0.08)
 
   constructor() {
     this.canvasContainerElem = <HTMLDivElement>document.getElementById('canvas-container')
@@ -37,13 +37,13 @@ class App {
     resizeObserver.observe(this.canvasContainerElem)
   }
 
-  seed(n: number) {
+  seed(n: number, targetArr: Set<Particle>, particleMass = 1) {
     let x, y, particle
     for (let i = 0; i < n; i++) {
       x = Math.ceil(Math.random() * this.canvasElem.width)
       y = Math.ceil(Math.random() * this.canvasElem.height)
-      particle = new Particle(this.ctx, x, y, Math.ceil(Math.random() * 2.5))
-      this.particles.add(particle)
+      particle = new Particle(this.ctx, x, y, particleMass || Math.ceil(Math.random()))
+      targetArr.add(particle)
     }
   }
 
@@ -51,10 +51,8 @@ class App {
     if (!this.quadtree) {
       const canvasRect = new Rect(0, 0, this.canvasElem.width, this.canvasElem.height)
       this.quadtree = new QuadTree(canvasRect, 2500)
-      this.seed(this.maxParticles)
-      this.massiveParticles.add(
-        new Particle(this.ctx, this.canvasElem.width - (Math.random() * this.canvasElem.width / 6), (Math.random() * 10), 3, 'cornflowerblue', true)
-      )
+      this.seed(this.maxParticles, this.particles)
+      this.seed(this.maxParticles / 2, this.massiveParticles, 0.5)
     }
 
     const gameLoop = () => {
@@ -62,7 +60,13 @@ class App {
       this.ctx.clearRect(0, 0, this.canvasElem.width, this.canvasElem.height)
 
       if (this.particles.size < this.maxParticles) {
-        this.seed(this.maxParticles - this.particles.size)
+        const particlesTarget = this.maxParticles - this.particles.size;
+        this.seed(particlesTarget, this.particles)
+      }
+      
+      if (this.massiveParticles.size < this.maxParticles / 3) {
+        const particlesTarget = this.maxParticles / 3 - this.massiveParticles.size;
+        this.seed(particlesTarget, this.massiveParticles)
       }
 
       for (let particle of this.particles) {
@@ -70,7 +74,7 @@ class App {
           this.particles.delete(particle)
         } else {
           this.quadtree.insert({ x: particle.pos.x, y: particle.pos.y, item: particle })
-          // particle.applyForce(new Vector2d(-0.0001, -0.0001))
+          // particle.applyForce(new Vector2d(-0.0001, -0.0001)) // Make them move!
           particle.update()
         }
 
@@ -104,7 +108,7 @@ class App {
   }
 
   pointerDownListener(e: PointerEvent) {
-    const particle = new Particle(this.ctx, e.x, e.y, 3, undefined, true)
+    const particle = new Particle(this.ctx, e.x, e.y, 1, undefined, true)
     this.massiveParticles.add(particle)
   }
 

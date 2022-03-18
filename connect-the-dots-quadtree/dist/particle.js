@@ -10,7 +10,7 @@ export class Particle extends Vector2d {
         this.pos = new Vector2d(x, y);
         this._color = color || undefined;
         this.mass = mass;
-        this.radius = Math.sqrt(this.mass) * 5;
+        this.radius = Math.sqrt(this.mass) * 3;
         this._isMassive = isMassive;
         this.timeStamp = performance.now();
         this.draw();
@@ -96,14 +96,14 @@ export class Particle extends Vector2d {
         const strength = ((this.mass * particle.mass) / distance) * 100;
         const gravitationalInfluenceForce = Vector2d.setMagnitude(force, strength);
         particle.applyForce(gravitationalInfluenceForce);
-        this.drawLine(this.pos, particle.pos, undefined, 1 - (Vector2d.magnitude(force) / influenceDistanceThreshold));
+        this.drawLine(this.pos, particle.pos, 1 - (Vector2d.magnitude(force) / influenceDistanceThreshold));
         // this.drawText(distance+"", this.pos.x, this.pos.y)
     }
     update() {
         this.velocity =
             Vector2d.limit(Vector2d.add([
                 this.velocity,
-                Vector2d.limit(this.acc, 0.05)
+                Vector2d.limit(this.acc, 0.0005)
             ]), 5);
         this.pos = Vector2d.add([
             this.pos,
@@ -119,7 +119,7 @@ export class Particle extends Vector2d {
             this.pos.x - this.radius * 2 > this.ctx.canvas.width);
     }
     // UI helpers
-    drawLine(origin, target, color = 'limegreen', intensity = 1) {
+    drawLine(origin, target, intensity = 1) {
         this.ctx.beginPath();
         this.ctx.moveTo(origin.x, origin.y);
         this.ctx.lineTo(target.x, target.y);
